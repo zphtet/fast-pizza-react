@@ -8,6 +8,16 @@ import Menu from "./pages/Menu";
 import Cart from "./pages/Cart";
 import OrderNew from "./pages/OrderNew";
 import Order from "./pages/Order";
+import { getMenu } from "./utils/helper";
+
+const wait = (sec: number) => {
+  return new Promise((res) => {
+    setTimeout(() => {
+      res("Waited for " + sec + " seconds");
+    }, sec * 1000);
+  });
+};
+
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
@@ -19,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/menu",
         element: <Menu />,
+        loader: async () => {
+          await wait(1);
+          return await getMenu();
+        },
       },
       {
         path: "/cart",
