@@ -22,3 +22,14 @@ export type newOrderType = {
   cart: cartItemType[];
   priority: boolean;
 };
+
+export type returnOrderType = {
+  customer: string;
+  status: string;
+  priority: boolean;
+  cart: newOrderType[];
+  id: string;
+  estimatedDelivery: Date;
+  orderPrice: number;
+  priorityPrice: number;
+};

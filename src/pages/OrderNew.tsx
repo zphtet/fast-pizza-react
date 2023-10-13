@@ -102,12 +102,13 @@ export const action: ActionFunction = async ({ request }) => {
     position: "",
   };
 
-  const res = await createOrder(orderObj);
-  console.log(res);
-
-  if (!res.ok) return { status: "fail", err: res };
-
-  return redirect(`/order/${res.id}`);
+  try {
+    const res = await createOrder(orderObj);
+    console.log(res);
+    return redirect(`/order/${res.id}`);
+  } catch (err) {
+    return { status: "fail", message: err?.message as string };
+  }
 };
 
 export default OrderNew;
