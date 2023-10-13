@@ -1,26 +1,42 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import CartItem from "../components/CartItem";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { RootState } from "../store/store";
+import Button from "../components/Button";
+import { clearCart } from "../store/reducers/cartSlice";
 const Cart = () => {
+  const cart = useSelector((state: RootState) => state.cart.cart);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isEmptyCart = cart.length === 0;
+  const clearCartHandler = () => dispatch(clearCart());
   return (
     <div className="px-5 max-w-3xl mx-auto">
       <Link to={"/menu"} className="text-sm text-blue-500">
         &larr; Back to Menu
       </Link>
-      <p className="py-3 text-2xl font-bold">Yout Cart , ZPH</p>
-      <div>
-        <CartItem />
-        <CartItem />
-        <CartItem />
-      </div>
-      <div className=" mt-5 flex gap-5">
-        <button className="uppercase py-2 px-4 bg-yellow-400 rounded-3xl hover:scale-95 hover:bg-yellow-200 transition-all duration-150">
-          Order Pizzas
-        </button>
-        <button className="uppercase py-2 px-4 bg-white rounded-3xl hover:scale-95 hover:bg-gray-50 transition-all duration-150">
-          Clear Cart
-        </button>
-      </div>
+
+      {isEmptyCart ? (
+        <p className="mt-5"> Your Cart is Empty !</p>
+      ) : (
+        <>
+          <p className="py-3 text-2xl font-bold">Yout Cart , ZPH</p>
+          <div>
+            {cart.map((item) => {
+              return <CartItem key={item.menuId} data={item} />;
+            })}
+          </div>
+          <div className=" mt-5 flex gap-5">
+            <Button text="Order Pizzas" click={() => navigate("/order/new")} />
+            <Button
+              text="Clear Cart"
+              click={clearCartHandler}
+              css="bg-slate-50 hover:bg-slate-200 border-2"
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };

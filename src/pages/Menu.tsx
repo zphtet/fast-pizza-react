@@ -1,21 +1,16 @@
 import MenuItem from "../components/MenuItem";
 import { useLoaderData } from "react-router-dom";
+import { MenuType } from "../types/type";
 function Menu() {
-  const menu = useLoaderData();
+  const menu = useLoaderData() as MenuType[];
 
   console.log(menu);
 
   return (
     <div className="max-w-3xl mx-auto divide-y">
-      <MenuItem />
-      <MenuItem soldout={true} />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
-      <MenuItem />
+      {menu.map((item) => {
+        return <MenuItem key={item.id} menu={item} />;
+      })}
     </div>
   );
 }

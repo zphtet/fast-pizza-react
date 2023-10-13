@@ -9,6 +9,7 @@ import Cart from "./pages/Cart";
 import OrderNew from "./pages/OrderNew";
 import Order from "./pages/Order";
 import { getMenu } from "./utils/helper";
+import Error from "./components/Error";
 
 const wait = (sec: number) => {
   return new Promise((res) => {
@@ -21,6 +22,7 @@ const wait = (sec: number) => {
 const router = createBrowserRouter([
   {
     element: <AppLayout />,
+    errorElement: <Error />,
     children: [
       {
         path: "/",

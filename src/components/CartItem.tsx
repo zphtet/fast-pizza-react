@@ -1,26 +1,53 @@
-import React from "react";
+// import React from "react";
+import { useDispatch } from "react-redux";
+import { cartItemType } from "../types/type";
+import Button from "./Button";
+import {
+  removeFromCart,
+  increaseQty,
+  decreaseQty,
+} from "../store/reducers/cartSlice";
+import ButtonCircle from "./ButtonCircle";
 
-const CartItem = () => {
+type CartItemProps = {
+  data: cartItemType;
+};
+const CartItem = ({ data }: CartItemProps) => {
+  const { menuId, name, price, quantity } = data;
+  const dispatch = useDispatch();
+
+  const isOne = quantity === 1;
+
+  const removeCartHandler = () => {
+    dispatch(removeFromCart(menuId!));
+  };
+
+  const increaseHandler = () => {
+    dispatch(increaseQty(menuId!));
+  };
+  const decreaseHandler = () => {
+    dispatch(decreaseQty(menuId!));
+  };
+
   return (
     <div className="py-4 border-b sm:flex sm:items-center sm:justify-between">
-      <p> 4 x Margherita</p>
+      <p>
+        {" "}
+        {quantity} x {name}
+      </p>
       <div className="flex items-center justify-between gap-5">
-        <p className="price font-semibold">$ 56.00</p>
+        <p className="price font-semibold">$ {quantity! * price!}</p>
         <div className="flex gap-4">
-          <button className="w-[25px] h-[25px] ring-offset-2 bg-yellow-400 rounded-full focus:ring-2 focus:ring-yellow-400 ">
-            -
-          </button>
+          <ButtonCircle
+            text="-"
+            click={isOne ? removeCartHandler : decreaseHandler}
+          />
 
-          <p>1</p>
-
-          <button className="w-[25px] h-[25px] ring-offset-2 bg-yellow-400 rounded-full focus:ring-2 focus:ring-yellow-400">
-            +
-          </button>
+          <p>{quantity}</p>
+          <ButtonCircle text="+" click={increaseHandler} />
         </div>
 
-        <button className="px-4 py-1 text-sm bg-yellow-400 rounded-3xl transition-all duration-200 hover:bg-yellow-300 hover:scale-95 uppercase">
-          Delete
-        </button>
+        <Button text="Delete" click={removeCartHandler} />
       </div>
     </div>
   );

@@ -6,8 +6,8 @@ import { useNavigation } from "react-router-dom";
 import { CirclesWithBar } from "react-loader-spinner";
 function AppLayout() {
   const navigation = useNavigation();
-  console.log(navigation, "Navigation");
   const isLoading = navigation.state === "loading";
+
   return (
     <div className="h-screen bg-main grid grid-rows-[auto_1fr_auto]">
       {isLoading && (
