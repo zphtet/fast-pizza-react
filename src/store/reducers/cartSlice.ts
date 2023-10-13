@@ -18,11 +18,11 @@ const cartSlice = createSlice({
       state.cart.push(action.payload);
     },
     removeFromCart(state, action: PayloadAction<number>) {
-      state.cart = state.cart.filter((item) => item.menuId !== action.payload);
+      state.cart = state.cart.filter((item) => item.pizzaId !== action.payload);
     },
     increaseQty(state, action: PayloadAction<number>) {
       state.cart = state.cart.map((item) => {
-        if (item.menuId !== action.payload) return item;
+        if (item.pizzaId !== action.payload) return item;
         return {
           ...item,
           quantity: (item.quantity as number) + 1,
@@ -31,7 +31,7 @@ const cartSlice = createSlice({
     },
     decreaseQty(state, action: PayloadAction<number>) {
       state.cart = state.cart.map((item) => {
-        if (item.menuId !== action.payload) return item;
+        if (item.pizzaId !== action.payload) return item;
 
         return {
           ...item,

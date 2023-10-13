@@ -43,4 +43,6 @@ const Order = () => {
   );
 };
 
+export const loader = async () => {};
+
 export default Order;

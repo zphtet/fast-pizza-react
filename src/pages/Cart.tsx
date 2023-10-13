@@ -24,7 +24,7 @@ const Cart = () => {
           <p className="py-3 text-2xl font-bold">Yout Cart , ZPH</p>
           <div>
             {cart.map((item) => {
-              return <CartItem key={item.menuId} data={item} />;
+              return <CartItem key={item.pizzaId} data={item} />;
             })}
           </div>
           <div className=" mt-5 flex gap-5">

@@ -19,15 +19,16 @@ const MenuItem = ({ menu }: MenuItemProps) => {
   const dispatch: AppDispatch = useDispatch();
   const cart = useSelector((state: RootState) => state.cart.cart);
 
-  const isInCart = cart.find((item) => item.menuId === id);
+  const isInCart = cart.find((item) => item.pizzaId === id);
   const isOne = isInCart?.quantity === 1;
   const addCartHandler = () => {
     dispatch(
       addToCart({
-        menuId: id,
-        price: unitPrice,
+        pizzaId: id,
+        unitPrice: unitPrice,
         quantity: 1,
         name: name,
+        totalPrice: 0,
       })
     );
     setAdded(true);

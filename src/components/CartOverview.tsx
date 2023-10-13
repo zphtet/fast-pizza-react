@@ -9,7 +9,7 @@ const CartOverview = () => {
     return accum + (item.quantity as number);
   }, 0);
   const totalPrice = cart.reduce((accum, item) => {
-    return accum + item.price! * item.quantity!;
+    return accum + item.unitPrice! * item.quantity!;
   }, 0);
   if (cart.length === 0) return null;
   return (

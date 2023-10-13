@@ -1,35 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/store";
-
+import Button from "../components/Button";
+import { Form, useActionData, redirect, useNavigation } from "react-router-dom";
+import type { ActionFunction } from "react-router-dom";
+import { createOrder } from "../utils/helper";
+import { cartItemType } from "../types/type";
 const OrderNew = () => {
-  const user = useSelector((state: RootState) => state.user);
-  const [userData, setUserData] = useState({
-    name: user.name,
-    phone: "",
-    address: "",
-  });
-  const [priority, setPriority] = useState(false);
-
-  const changeHandler = (e: React.ChangeEvent) => {
-    const target = e.target as HTMLInputElement;
-    setUserData((prev) => {
-      return {
-        ...prev,
-        [target.name]: target.value,
-      };
-    });
-  };
-
-  const clickCheckHandler = (e: React.MouseEvent<HTMLInputElement>) => {
-    const target = e.target as HTMLInputElement;
-    console.log("priority", target.checked);
-    setPriority(target.checked);
-  };
-
-  useEffect(() => {
-    return () => {};
-  }, []);
+  const cart = useSelector((state: RootState) => state.cart.cart);
+  const user = useSelector((state: RootState) => state.user.name);
+  const status = useActionData();
+  const navigation = useNavigation();
+  console.log(navigation.state);
+  const isSubmitting = navigation.state === "submitting";
+  console.log("Returned from Action", status);
+  const totalPrice = cart.reduce((accum, item) => {
+    return accum + item.unitPrice! * item.quantity!;
+  }, 0);
 
   return (
     <div className="px-5 max-w-3xl mx-auto">
@@ -37,31 +24,29 @@ const OrderNew = () => {
         Ready to order ? Let's go !
       </p>
 
-      <form className=" py-2 space-y-2 ">
+      <Form method="POST" className=" py-2 space-y-2 ">
         <div className="flex flex-col gap-1">
           <label className="label">
             <span className="label-text">Your Name</span>
           </label>
           <input
             type="text"
-            placeholder="Type here"
+            readOnly={user ? true : false}
+            placeholder={user ? user : "Your Name"}
             className="input py-2 h-auto w-full rounded-3xl text-sm focus:outline-yellow-400"
-            value={userData.name}
             name="customer"
-            onChange={changeHandler}
+            defaultValue={user}
           />
         </div>
         <div className="flex flex-col gap-1">
           <label className="label">
-            <span className="label-text">Phone Number</span>
+            <span className="label-text">"Phone" Number</span>
           </label>
           <input
             type="tel"
             placeholder="Type here"
             className="input py-2 h-auto w-full rounded-3xl text-sm focus:outline-yellow-400"
             name="phone"
-            value={userData.phone}
-            onChange={changeHandler}
           />
         </div>
 
@@ -75,8 +60,6 @@ const OrderNew = () => {
               placeholder="Type here"
               className="flex-1 text-sm hover:outline-none px-5 focus:outline-none py-1 "
               name="address"
-              value={userData.address}
-              onChange={changeHandler}
             />
             <span className=" cursor-pointer text-center block rounded-3xl py-1 h-auto px-2 bg-yellow-400 hover:bg-yellow-200 w-[150px] hover:scale-95 transition-all duration-150">
               Get Position
@@ -87,20 +70,44 @@ const OrderNew = () => {
           <input
             type="checkbox"
             id="priority"
-            onClick={clickCheckHandler}
+            name="priority"
             className="w-6 h-6 accent-yellow-400 border-2 border-yellow-500 focus:ring-4 focus:ring-yellow-400 focus:ring-offset-2"
           />
           <label htmlFor="priority">Want to give your order priority ? </label>
         </div>
-
+        <input
+          type="hidden"
+          name="cart"
+          readOnly
+          value={JSON.stringify(cart)}
+        />
         <div className="btn-container pt-5 flex justify-end">
-          <button className="uppercase py-2 px-4 bg-yellow-400 rounded-3xl hover:scale-95 hover:bg-yellow-200 transition-all duration-150">
-            Order Now $123.99
-          </button>
+          <Button disabled={isSubmitting} text={`Order Now $${totalPrice}`} />
         </div>
-      </form>
+      </Form>
     </div>
   );
+};
+
+export const action: ActionFunction = async ({ request }) => {
+  const data = await request.formData();
+  const obj = Object.fromEntries(data);
+  // console.log(obj);
+  const orderObj = {
+    customer: obj.customer as string,
+    phone: obj.phone as string,
+    address: obj.address as string,
+    cart: JSON.parse(obj.cart as string) as cartItemType[],
+    priority: obj.priority ? true : false,
+    position: "",
+  };
+
+  const res = await createOrder(orderObj);
+  console.log(res);
+
+  if (!res.ok) return { status: "fail", err: res };
+
+  return redirect(`/order/${res.id}`);
 };
 
 export default OrderNew;

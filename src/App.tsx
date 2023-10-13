@@ -6,7 +6,7 @@ import AppLayout from "./pages/AppLayout";
 import Home from "./pages/Home";
 import Menu from "./pages/Menu";
 import Cart from "./pages/Cart";
-import OrderNew from "./pages/OrderNew";
+import OrderNew, { action as OrederAction } from "./pages/OrderNew";
 import Order from "./pages/Order";
 import { getMenu } from "./utils/helper";
 import Error from "./components/Error";
@@ -43,6 +43,7 @@ const router = createBrowserRouter([
       {
         path: "/order/new",
         element: <OrderNew />,
+        action: OrederAction,
       },
       {
         path: "/order/:id",

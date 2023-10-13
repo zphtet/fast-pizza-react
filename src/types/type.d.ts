@@ -9,9 +9,16 @@ export type MenuType = {
 
 export type cartItemType = {
   name: string;
-  menuId: number | null;
-  price: number | null;
+  pizzaId: number | null;
+  unitPrice: number | null;
   quantity: number | null;
-  orderId?: string | null;
-  estimateWatitTime?: number | null;
+  totalPrice: number | null;
+};
+
+export type newOrderType = {
+  address: string;
+  phone: string;
+  customer: string;
+  cart: cartItemType[];
+  priority: boolean;
 };

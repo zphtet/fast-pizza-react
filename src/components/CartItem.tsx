@@ -13,20 +13,20 @@ type CartItemProps = {
   data: cartItemType;
 };
 const CartItem = ({ data }: CartItemProps) => {
-  const { menuId, name, price, quantity } = data;
+  const { pizzaId, name, unitPrice, quantity } = data;
   const dispatch = useDispatch();
 
   const isOne = quantity === 1;
 
   const removeCartHandler = () => {
-    dispatch(removeFromCart(menuId!));
+    dispatch(removeFromCart(pizzaId!));
   };
 
   const increaseHandler = () => {
-    dispatch(increaseQty(menuId!));
+    dispatch(increaseQty(pizzaId!));
   };
   const decreaseHandler = () => {
-    dispatch(decreaseQty(menuId!));
+    dispatch(decreaseQty(pizzaId!));
   };
 
   return (
@@ -36,7 +36,7 @@ const CartItem = ({ data }: CartItemProps) => {
         {quantity} x {name}
       </p>
       <div className="flex items-center justify-between gap-5">
-        <p className="price font-semibold">$ {quantity! * price!}</p>
+        <p className="price font-semibold">$ {quantity! * unitPrice!}</p>
         <div className="flex gap-4">
           <ButtonCircle
             text="-"
