@@ -1,13 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import Button from "../components/Button";
 import { Form, useActionData, redirect, useNavigation } from "react-router-dom";
 import type { ActionFunction } from "react-router-dom";
-import { createOrder } from "../utils/helper";
+import { createOrder, getAddress } from "../utils/helper";
 import { cartItemType } from "../types/type";
 import { clearCart } from "../store/reducers/cartSlice";
 const OrderNew = () => {
+  const [location, setLocation] = useState("");
   const cart = useSelector((state: RootState) => state.cart.cart);
   const user = useSelector((state: RootState) => state.user.name);
   const dispatch = useDispatch();
@@ -19,6 +20,19 @@ const OrderNew = () => {
   const totalPrice = cart.reduce((accum, item) => {
     return accum + item.unitPrice! * item.quantity!;
   }, 0);
+
+  const positionHandler = async () => {
+    navigator.geolocation.getCurrentPosition(async (position) => {
+      const lat = position.coords.latitude;
+      const long = position.coords.longitude;
+      const data = await getAddress({
+        latitude: lat,
+        longitude: long,
+      });
+      console.log(data, "location handler");
+      setLocation(`${data.locality}, ${data.city}`);
+    });
+  };
 
   useEffect(() => {
     return () => {
@@ -44,17 +58,19 @@ const OrderNew = () => {
             className="input py-2 h-auto w-full rounded-3xl text-sm focus:outline-yellow-400"
             name="customer"
             defaultValue={user}
+            required
           />
         </div>
         <div className="flex flex-col gap-1">
           <label className="label">
-            <span className="label-text">"Phone" Number</span>
+            <span className="label-text">Phone Number</span>
           </label>
           <input
             type="tel"
             placeholder="Type here"
             className="input py-2 h-auto w-full rounded-3xl text-sm focus:outline-yellow-400"
             name="phone"
+            required
           />
         </div>
 
@@ -68,8 +84,13 @@ const OrderNew = () => {
               placeholder="Type here"
               className="flex-1 text-sm hover:outline-none px-5 focus:outline-none py-1 "
               name="address"
+              defaultValue={location}
+              required
             />
-            <span className=" cursor-pointer text-center block rounded-3xl py-1 h-auto px-2 bg-yellow-400 hover:bg-yellow-200 w-[150px] hover:scale-95 transition-all duration-150">
+            <span
+              onClick={positionHandler}
+              className=" cursor-pointer text-center block rounded-3xl py-1 h-auto px-2 bg-yellow-400 hover:bg-yellow-200 w-[150px] hover:scale-95 transition-all duration-150"
+            >
               Get Position
             </span>
           </div>

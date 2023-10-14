@@ -25,3 +25,11 @@ const formatedDate = format(
   "MMM d h:mm:ss aaaaa'm'"
 );
 console.log(formatedDate);
+
+fetch("https://ipapi.co/json/")
+  .then(function (response) {
+    return response.json();
+  })
+  .then(function (data) {
+    console.log(data, "fetch country");
+  });
