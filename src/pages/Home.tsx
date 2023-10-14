@@ -32,7 +32,11 @@ function Home() {
       )}
 
       {(name.trim() || myName) && (
-        <Button click={clickHandler} text={`Go Shopping ${myName}`} />
+        <Button
+          click={clickHandler}
+          css="mt-5"
+          text={`Go Shopping ${myName}`}
+        />
       )}
     </div>
   );

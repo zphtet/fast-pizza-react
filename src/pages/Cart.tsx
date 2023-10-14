@@ -32,7 +32,7 @@ const Cart = () => {
             <Button
               text="Clear Cart"
               click={clearCartHandler}
-              css="bg-slate-50 hover:bg-slate-200 border-2"
+              css="bg-slate-100 hover:bg-slate-300 border-2"
             />
           </div>
         </>

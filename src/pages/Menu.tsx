@@ -4,7 +4,7 @@ import { MenuType } from "../types/type";
 function Menu() {
   const menu = useLoaderData() as MenuType[];
 
-  console.log(menu);
+  // console.log(menu);
 
   return (
     <div className="max-w-3xl mx-auto divide-y">

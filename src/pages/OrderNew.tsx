@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import Button from "../components/Button";
 import { Form, useActionData, redirect, useNavigation } from "react-router-dom";
 import type { ActionFunction } from "react-router-dom";
 import { createOrder } from "../utils/helper";
 import { cartItemType } from "../types/type";
+import { clearCart } from "../store/reducers/cartSlice";
 const OrderNew = () => {
   const cart = useSelector((state: RootState) => state.cart.cart);
   const user = useSelector((state: RootState) => state.user.name);
+  const dispatch = useDispatch();
   const status = useActionData();
   const navigation = useNavigation();
   console.log(navigation.state);
@@ -17,6 +19,12 @@ const OrderNew = () => {
   const totalPrice = cart.reduce((accum, item) => {
     return accum + item.unitPrice! * item.quantity!;
   }, 0);
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearCart());
+    };
+  }, []);
 
   return (
     <div className="px-5 max-w-3xl mx-auto">
@@ -92,7 +100,7 @@ const OrderNew = () => {
 export const action: ActionFunction = async ({ request }) => {
   const data = await request.formData();
   const obj = Object.fromEntries(data);
-  // console.log(obj);
+
   const orderObj = {
     customer: obj.customer as string,
     phone: obj.phone as string,
@@ -106,7 +114,7 @@ export const action: ActionFunction = async ({ request }) => {
     const res = await createOrder(orderObj);
     console.log(res);
     return redirect(`/order/${res.id}`);
-  } catch (err) {
+  } catch (err: unknown) {
     return { status: "fail", message: err?.message as string };
   }
 };

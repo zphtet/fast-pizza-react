@@ -1,13 +1,25 @@
 import React from "react";
+import type { cartItemType } from "../types/type";
 
-const OrderItem = () => {
+type OrderItemProps = {
+  data: cartItemType;
+  isLoading: boolean;
+  ingredients: string[] | [];
+};
+const OrderItem = ({ data, isLoading, ingredients }: OrderItemProps) => {
+  // console.log(ingredients, "ingredients");
+  const { name, quantity, unitPrice } = data;
   return (
     <div className="py-3 ">
       <div className="flex items-center justify-between">
-        <p>3 x ItlianPizza</p>
-        <p className="font-bold">$ 12.34</p>
+        <p>
+          {quantity} x {name}
+        </p>
+        <p className="font-bold">$ {quantity! * unitPrice!}</p>
       </div>
-      <p className="text-sm text-gray-400">Tomato, Mozzarella, Prosciutto</p>
+      <p className="text-sm text-gray-400">
+        {isLoading ? "Loading ..." : ingredients.join(",")}
+      </p>
     </div>
   );
 };

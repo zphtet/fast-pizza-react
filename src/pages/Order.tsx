@@ -1,14 +1,17 @@
 import React from "react";
 import OrderItem from "../components/OrderItem";
 import { getOrder } from "../utils/helper";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useFetcher, LoaderFunction } from "react-router-dom";
 import { returnOrderType } from "../types/type";
 import formatDistance from "date-fns/formatDistance";
 import { format } from "date-fns";
+import type { MenuType } from "../types/type";
+import UpdateOrder from "../components/UpdateOrder";
 const Order = () => {
   const data = useLoaderData() as returnOrderType;
+  const fetcher = useFetcher();
+  // console.log(data);
   const {
-    customer,
     status,
     cart,
     priority,
@@ -17,11 +20,23 @@ const Order = () => {
     orderPrice,
     priorityPrice,
   } = data;
+  // console.log(cart, "cart");
+
+  React.useEffect(() => {
+    console.log("use Effext wroking");
+    if (fetcher.state === "idle" && !fetcher.data) {
+      console.log("fetching menu data");
+      fetcher.load("/menu");
+    }
+  }, [fetcher]);
+
+  const isLoading = fetcher.state === "loading";
+
   return (
     <div className="py-6 px-5 space-y-4 sm:space-y-8 max-w-3xl mx-auto">
       <div className="flex flex-col  gap-3 sm:flex-row sm:items-center sm:justify-between ">
         <p className="text-xl font-semibold ">
-          order <span className="text-2xl">{id} </span> status
+          order <span className="text-2xl">#{id} </span> status
         </p>
         <div className="flex gap-3 text-sm">
           {priority && (
@@ -39,7 +54,7 @@ const Order = () => {
       </div>
       <div className="bg-stone-200 p-5">
         <p>
-          Only {formatDistance(new Date(estimatedDelivery), Date.now())} minutes
+          Only {formatDistance(new Date(estimatedDelivery), Date.now())}
           left 😊
         </p>
         <span className="text-sm text-gray-400">
@@ -48,9 +63,19 @@ const Order = () => {
         </span>
       </div>
       <div className=" divide-y last:border-b">
-        <OrderItem />
-        <OrderItem />
-        <OrderItem />
+        {cart.map((item) => {
+          const find = fetcher?.data?.find(
+            (menu: MenuType) => menu.id === item.pizzaId
+          );
+          return (
+            <OrderItem
+              key={item.pizzaId}
+              data={item}
+              isLoading={isLoading}
+              ingredients={find?.ingredients || []}
+            />
+          );
+        })}
       </div>
       <div className="bg-stone-200 p-5 ">
         <p>Price Pizza : ${orderPrice}</p>
@@ -60,17 +85,20 @@ const Order = () => {
         </p>
       </div>
       <div className="btn-container pt-5 flex justify-end">
-        <button className="uppercase py-2 px-4 bg-yellow-400 rounded-3xl hover:scale-95 hover:bg-yellow-200 transition-all duration-150">
-          Continue Shopping
-        </button>
+        {!priority && <UpdateOrder />}
       </div>
     </div>
   );
 };
 
-export const loader = async ({ params }: { params: { id: string } }) => {
+export const loader: LoaderFunction = async ({
+  params,
+}: {
+  params: { id: string };
+}) => {
   const { id } = params;
-  return await getOrder(id);
+  const data = await getOrder(id);
+  return data;
 };
 
 export default Order;

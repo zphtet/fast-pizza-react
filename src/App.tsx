@@ -1,5 +1,3 @@
-import React from "react";
-
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import AppLayout from "./pages/AppLayout";
@@ -10,7 +8,7 @@ import OrderNew, { action as OrederAction } from "./pages/OrderNew";
 import Order, { loader as orderLoader } from "./pages/Order";
 import { getMenu } from "./utils/helper";
 import Error from "./components/Error";
-
+import { action as updateAction } from "./components/UpdateOrder";
 const wait = (sec: number) => {
   return new Promise((res) => {
     setTimeout(() => {
@@ -49,6 +47,7 @@ const router = createBrowserRouter([
         path: "/order/:id",
         element: <Order />,
         loader: orderLoader,
+        action: updateAction,
       },
     ],
   },

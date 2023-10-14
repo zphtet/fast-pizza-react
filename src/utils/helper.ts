@@ -41,3 +41,23 @@ export async function getOrder(id: string): Promise<returnOrderType> {
   const { data } = await res.json();
   return data;
 }
+
+export async function updateOrder(
+  id: string,
+  updateObj: { priority: boolean }
+) {
+  try {
+    const res = await fetch(`${API_URL}/order/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(updateObj),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) throw Error();
+    // We don't need the data, so we don't return anything
+  } catch (err) {
+    throw Error("Failed updating your order");
+  }
+}
