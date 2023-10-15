@@ -1,5 +1,3 @@
-import React from "react";
-
 type BtnProps = {
   text: string;
   click?: () => void;

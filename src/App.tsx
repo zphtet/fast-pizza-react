@@ -5,17 +5,10 @@ import Home from "./pages/Home";
 import Menu from "./pages/Menu";
 import Cart from "./pages/Cart";
 import OrderNew, { action as OrederAction } from "./pages/OrderNew";
-import Order, { loader as orderLoader } from "./pages/Order";
-import { getMenu } from "./utils/helper";
+import Order from "./pages/Order";
+import { getMenu, getOrder } from "./utils/helper";
 import Error from "./components/Error";
 import { action as updateAction } from "./components/UpdateOrder";
-const wait = (sec: number) => {
-  return new Promise((res) => {
-    setTimeout(() => {
-      res("Waited for " + sec + " seconds");
-    }, sec * 1000);
-  });
-};
 
 const router = createBrowserRouter([
   {
@@ -30,7 +23,7 @@ const router = createBrowserRouter([
         path: "/menu",
         element: <Menu />,
         loader: async () => {
-          await wait(1);
+          // await wait(1);
           return await getMenu();
         },
       },
@@ -46,7 +39,10 @@ const router = createBrowserRouter([
       {
         path: "/order/:id",
         element: <Order />,
-        loader: orderLoader,
+        loader: async ({ params }) => {
+          const { id } = params;
+          return await getOrder(id as string);
+        },
         action: updateAction,
       },
     ],

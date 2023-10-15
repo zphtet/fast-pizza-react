@@ -1,7 +1,6 @@
 import React from "react";
 import OrderItem from "../components/OrderItem";
-import { getOrder } from "../utils/helper";
-import { useLoaderData, useFetcher, LoaderFunction } from "react-router-dom";
+import { useLoaderData, useFetcher } from "react-router-dom";
 import { returnOrderType } from "../types/type";
 import formatDistance from "date-fns/formatDistance";
 import { format } from "date-fns";
@@ -85,16 +84,6 @@ const Order = () => {
       </div>
     </div>
   );
-};
-
-export const loader: LoaderFunction = async ({
-  params,
-}: {
-  params: { id: string };
-}) => {
-  const { id } = params;
-  const data = await getOrder(id);
-  return data;
 };
 
 export default Order;

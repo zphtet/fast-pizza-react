@@ -1,4 +1,3 @@
-import React from "react";
 import type { cartItemType } from "../types/type";
 
 type OrderItemProps = {
