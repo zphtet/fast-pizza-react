@@ -2,21 +2,27 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store/store";
 import Button from "../components/Button";
-import { Form, useActionData, redirect, useNavigation } from "react-router-dom";
+import {
+  Form,
+  useActionData,
+  redirect,
+  useNavigation,
+  Link,
+} from "react-router-dom";
 import type { ActionFunction } from "react-router-dom";
 import { createOrder, getAddress } from "../utils/helper";
 import { cartItemType } from "../types/type";
 import { clearCart } from "../store/reducers/cartSlice";
+import { isValidPhone } from "../utils/helper";
 const OrderNew = () => {
   const [location, setLocation] = useState("");
   const cart = useSelector((state: RootState) => state.cart.cart);
   const user = useSelector((state: RootState) => state.user.name);
   const dispatch = useDispatch();
-  const status = useActionData();
+  const actionData = useActionData() as { phone?: string };
   const navigation = useNavigation();
-  console.log(navigation.state);
+
   const isSubmitting = navigation.state === "submitting";
-  console.log("Returned from Action", status);
   const totalPrice = cart.reduce((accum, item) => {
     return accum + item.unitPrice! * item.quantity!;
   }, 0);
@@ -29,7 +35,6 @@ const OrderNew = () => {
         latitude: lat,
         longitude: long,
       });
-      console.log(data, "location handler");
       setLocation(`${data.locality}, ${data.city}`);
     });
   };
@@ -40,6 +45,13 @@ const OrderNew = () => {
     };
   }, []);
 
+  if (cart.length === 0)
+    return (
+      <div>
+        <Link to={"/menu"}> &larr; Back to Menu</Link>
+        <p>Your Cart is Empty</p>
+      </div>
+    );
   return (
     <div className="px-5 max-w-3xl mx-auto">
       <p className="text-xl py-5 font-bold sm:text-2xl">
@@ -72,6 +84,11 @@ const OrderNew = () => {
             name="phone"
             required
           />
+          {actionData?.phone && (
+            <span className="text-red-700 text-sm">
+              Invalid phone number , We might need to contact you
+            </span>
+          )}
         </div>
 
         <div className="">
@@ -131,11 +148,19 @@ export const action: ActionFunction = async ({ request }) => {
     position: "",
   };
 
+  const errors: { phone?: string } = {};
+
+  if (!isValidPhone(orderObj.phone)) {
+    errors.phone = "Invalid phone number";
+  }
+
+  if (Object.keys(errors).length > 0) return errors;
+  // if()
   try {
     const res = await createOrder(orderObj);
-    console.log(res);
+
     return redirect(`/order/${res.id}`);
-  } catch (err: unknown) {
+  } catch (err: any) {
     return { status: "fail", message: err?.message as string };
   }
 };

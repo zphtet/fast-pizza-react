@@ -11,8 +11,6 @@ export async function getMenu(): Promise<MenuType[]> {
 }
 
 export async function createOrder(newOrder: newOrderType) {
-  console.log(newOrder, "New ORDER");
-
   try {
     const res = await fetch(`${API_URL}/order`, {
       method: "POST",
@@ -77,3 +75,16 @@ export async function getAddress({
   const data = await res.json();
   return data;
 }
+
+export const isValidPhone = (str: string) =>
+  /^\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}$/.test(
+    str
+  );
+
+// export async function getOrder(id: string) {
+//   const res = await fetch(`${API_URL}/order/${id}`);
+//   if (!res.ok) throw Error(`Couldn't find order #${id}`);
+
+//   const { data } = await res.json();
+//   return data;
+// }

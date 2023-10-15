@@ -10,7 +10,6 @@ import UpdateOrder from "../components/UpdateOrder";
 const Order = () => {
   const data = useLoaderData() as returnOrderType;
   const fetcher = useFetcher();
-  // console.log(data);
   const {
     status,
     cart,
@@ -20,12 +19,9 @@ const Order = () => {
     orderPrice,
     priorityPrice,
   } = data;
-  // console.log(cart, "cart");
 
   React.useEffect(() => {
-    console.log("use Effext wroking");
     if (fetcher.state === "idle" && !fetcher.data) {
-      console.log("fetching menu data");
       fetcher.load("/menu");
     }
   }, [fetcher]);
