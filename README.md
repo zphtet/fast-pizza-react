@@ -1,27 +1,23 @@
-# React + TypeScript + Vite
+# Fast Pizza - React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+In thi project , I mainly focused and used react router action and loader data fetching and mutation .
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Technologies used in the project:
 
-## Expanding the ESLint configuration
+- [React](https://react.dev/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Redux Toolkit](https://redux-toolkit.js.org/introduction/getting-started)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- [React router](https://reactrouter.com/en/main)
 
-- Configure the top-level `parserOptions` property like this:
+## Screenshots
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+![App Screenshot](https://res.cloudinary.com/dx55rkwpo/image/upload/v1697458992/mobile_axdzdm.png)
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+## Demo
+
+You can play around with the demo to know how the app works .
+
+[Live Demo](https://fast-pizza-react-beige.vercel.app/)
