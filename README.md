@@ -7,6 +7,7 @@ In thi project , I mainly focused and used react router action and loader data f
 Technologies used in the project:
 
 - [React](https://react.dev/)
+- [Typescript](https://www.typescriptlang.org/)
 - [TailwindCSS](https://tailwindcss.com/)
 - [Redux Toolkit](https://redux-toolkit.js.org/introduction/getting-started)
 
